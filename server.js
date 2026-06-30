@@ -1,12 +1,13 @@
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
+const fs = require('fs');
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
 const host = '127.0.0.1';
 const basePath = normalizeBasePath(process.env.BASE_PATH || '/');
-const distPath = path.join(__dirname, 'dist', 'hydra', 'browser');
+const distPath = resolveDistPath();
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
@@ -180,4 +181,15 @@ function joinBasePath(route) {
   }
 
   return `${basePath}${route}`;
+}
+
+function resolveDistPath() {
+  const flattenedPath = path.join(__dirname, 'dist', 'hydra');
+  const legacyBrowserPath = path.join(flattenedPath, 'browser');
+
+  if (fs.existsSync(path.join(flattenedPath, 'index.html'))) {
+    return flattenedPath;
+  }
+
+  return legacyBrowserPath;
 }
