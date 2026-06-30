@@ -184,11 +184,16 @@ function joinBasePath(route) {
 }
 
 function resolveDistPath() {
-  const flattenedPath = path.join(__dirname, 'dist', 'hydra');
+  const flattenedPath = path.join(__dirname, 'dist');
   const legacyBrowserPath = path.join(flattenedPath, 'browser');
+  const nestedProjectPath = path.join(flattenedPath, 'hydra');
 
   if (fs.existsSync(path.join(flattenedPath, 'index.html'))) {
     return flattenedPath;
+  }
+
+  if (fs.existsSync(path.join(nestedProjectPath, 'index.html'))) {
+    return nestedProjectPath;
   }
 
   return legacyBrowserPath;
