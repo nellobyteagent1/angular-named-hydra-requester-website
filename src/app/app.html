@@ -1,0 +1,138 @@
+<main class="page-shell">
+  <section class="hero-card">
+    <div class="hero-copy">
+      <p class="eyebrow">Hydra Weight-Loss Studio</p>
+      <h1>
+        <span class="gradient-text">Lose weight calmly.</span>
+        <span class="gradient-text alt">Train with colour, rhythm, and focus.</span>
+      </h1>
+      <p class="lead">
+        Hydra blends gentle workout guidance, realistic fat-loss tips, and an optional
+        voice-led audio mode to help you build a routine you can keep.
+      </p>
+
+      <div class="hero-actions">
+        <button type="button" class="primary-button" (click)="toggleAudio()">
+          {{ audioEnabled() ? 'Pause Calm Audio' : 'Start Calm Audio' }}
+        </button>
+        <button type="button" class="secondary-button" (click)="playVoiceGuide()">
+          {{ speaking() ? 'Replay Voice Guide' : 'Play Voice Guide' }}
+        </button>
+      </div>
+
+      <div class="metric-row">
+        <article>
+          <strong>10-25 min</strong>
+          <span>Workouts sized for consistency</span>
+        </article>
+        <article>
+          <strong>{{ signupCount() }}</strong>
+          <span>Reset plans saved in Hydra</span>
+        </article>
+        <article>
+          <strong>Calm + vibrant</strong>
+          <span>Designed to reduce overwhelm</span>
+        </article>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <div class="voice-card">
+        <p class="panel-label">Audio Guidance</p>
+        <h2>Breath-first coaching</h2>
+        <p>
+          Start the ambient background track, then use your browser’s built-in speech
+          voice for short instructions before each session.
+        </p>
+        <ul>
+          <li>Soft synthesized music built into the app</li>
+          <li>Voice guidance triggered on demand</li>
+          <li>Useful for home workouts and recovery days</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <article class="content-card">
+      <div class="section-heading">
+        <p class="eyebrow">Workout Guidance</p>
+        <h2>Low-pressure sessions that still move the scale</h2>
+      </div>
+
+      @if (loading()) {
+        <p class="empty-state">Loading Hydra workouts...</p>
+      } @else {
+        <div class="card-stack">
+          @for (workout of workouts(); track workout.title) {
+            <div class="program-card">
+              <div class="program-meta">
+                <span>{{ workout.duration_minutes }} min</span>
+                <span>{{ workout.focus }}</span>
+              </div>
+              <h3>{{ workout.title }}</h3>
+              <p>{{ workout.description }}</p>
+            </div>
+          }
+        </div>
+      }
+    </article>
+
+    <article class="content-card">
+      <div class="section-heading">
+        <p class="eyebrow">Weight-Loss Tips</p>
+        <h2>Simple nutrition and recovery wins</h2>
+      </div>
+
+      @if (loading()) {
+        <p class="empty-state">Loading Hydra tips...</p>
+      } @else {
+        <div class="tip-list">
+          @for (tip of tips(); track tip.title) {
+            <div class="tip-item">
+              <h3>{{ tip.title }}</h3>
+              <p>{{ tip.detail }}</p>
+            </div>
+          }
+        </div>
+      }
+    </article>
+  </section>
+
+  <section class="signup-card">
+    <div class="section-heading">
+      <p class="eyebrow">Save Your Reset</p>
+      <h2>Store a personal goal in the Hydra backend</h2>
+    </div>
+
+    <form class="signup-form" (ngSubmit)="submitSignup()">
+      <label>
+        <span>Name</span>
+        <input [(ngModel)]="name" name="name" type="text" placeholder="Your first name" />
+      </label>
+      <label>
+        <span>Email</span>
+        <input
+          [(ngModel)]="email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+        />
+      </label>
+      <label>
+        <span>Main goal</span>
+        <textarea
+          [(ngModel)]="goal"
+          name="goal"
+          rows="4"
+          placeholder="Example: lose 6kg steadily and walk 5 days each week"
+        ></textarea>
+      </label>
+      <button type="submit" class="primary-button">Save My Hydra Plan</button>
+    </form>
+
+    @if (message()) {
+      <p class="status-message">{{ message() }}</p>
+    }
+  </section>
+</main>
